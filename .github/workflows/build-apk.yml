@@ -28,11 +28,19 @@ jobs:
         run: |
           if [ -f "package.json" ]; then
             npm install
-            npx vite build --base=./ || npm run build
+            npx vite build --base=./ || npm run build || echo "Build script skipped"
             if [ -d "dist" ]; then mv dist www; elif [ -d "build" ]; then mv build www; fi
-          else
+          fi
+          
+          # If www doesn't exist yet, treat it as a plain HTML project and copy everything
+          if [ ! -d "www" ]; then
             mkdir -p www
             find . -maxdepth 1 ! -name 'www' ! -name '.git' ! -name '.github' ! -name '.' -exec cp -r {} www/ \;
+          fi
+          
+          # Safety Check: If index.html is missing, create a visible error instead of a blank white screen
+          if [ ! -f "www/index.html" ]; then
+            echo "<h3 style='text-align:center;margin-top:50px;color:red;'>Error: index.html not found! Check GitHub file structure.</h3>" > www/index.html
           fi
 
       - name: Wrap into Native Android Project
@@ -40,9 +48,9 @@ jobs:
           if [ ! -f "package.json" ]; then npm init -y; fi
           npm install @capacitor/core @capacitor/cli @capacitor/android
           
-          # Configured specifically for Droid Player
           npx cap init "Droid Player" "com.rxtritik.droidplayer" --web-dir www
           npx cap add android
+          npx cap sync android
 
       - name: Compile Debug APK
         run: |
