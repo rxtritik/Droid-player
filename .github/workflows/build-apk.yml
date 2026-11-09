@@ -40,11 +40,11 @@ jobs:
           if [ ! -f "package.json" ]; then npm init -y; fi
           npm install @capacitor/core @capacitor/cli @capacitor/android
           
-          # Configured specifically for your repository
+          # Configured specifically for Droid Player
           npx cap init "Droid Player" "com.rxtritik.droidplayer" --web-dir www
           npx cap add android
 
-       - name: Compile Debug APK
+      - name: Compile Debug APK
         run: |
           cd android
           
