@@ -1,0 +1,6 @@
+{
+  "name": "Droid Player",
+  "description": "A polished, Android-inspired music player with a fluid Material Design interface, featuring playback controls, playlist management, and immersive transitions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
